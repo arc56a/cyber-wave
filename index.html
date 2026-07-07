@@ -344,25 +344,6 @@
                         تطبيق <span class="text-white font-bold">Cyber Wave</span> هو بوابتك لتجربة موسيقية وصوتية من المستقبل. يجمع التطبيق بين مشغل موسيقى فائق الجودة بتصميم Cyberpunk فاخر، وبين راديو القرآن الكريم الذي يضم تلاوات عطرة لأشهر القراء. بالإضافة إلى ذلك، يوفر التطبيق أقساماً متكاملة للبودكاست وأحدث الأخبار، مع واجهة مستخدم تعتمد نظام الـ Bento الذكي لضمان أسرع وصول لمحتواك المفضل بلمسة واحدة.
                     </p>
                 </div>
-
-                <!-- ما الجديد (What's New) Section -->
-                <div class="bg-white/5 border border-white/10 rounded-[30px] p-6 mb-10 shadow-xl border-dashed">
-                    <h3 class="text-white font-black mb-4 flex items-center gap-2 text-lg">
-                        <svg class="w-5 h-5 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                        ما الجديد في التحديث
-                    </h3>
-                    <ul class="space-y-3">
-                        <!-- أضف ميزاتك الجديدة هنا -->
-                        <li class="flex items-start gap-3 text-sm text-gray-400">
-                            <span class="text-gold mt-1">•</span>
-                            <span>(اكتب هنا الميزة الجديدة الأولى التي أضفتها)</span>
-                        </li>
-                        <li class="flex items-start gap-3 text-sm text-gray-400">
-                            <span class="text-gold mt-1">•</span>
-                            <span>(اكتب هنا الميزة الجديدة الثانية)</span>
-                        </li>
-                    </ul>
-                </div>
             </div>
 
             <!-- Download Section -->
@@ -390,6 +371,9 @@
                     <span class="coming-soon-text">قريباً</span>
                 </div>
             </div>
+
+            <!-- مكان ظهور قسم (ما الجديد) - يتم جلبه تلقائياً من ملف whats_new.html -->
+            <div id="whats-new-container" class="w-full"></div>
 
             <!-- Phone Mockup (Showcase) -->
             <div class="w-full text-center mb-6">
@@ -483,6 +467,14 @@
                 unmuteIcon.classList.add('hidden');
             }
         });
+
+        // جلب محتوى قسم ما الجديد من الملف المستقل
+        fetch('whats_new.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('whats-new-container').innerHTML = data;
+            })
+            .catch(error => console.log('Error loading updates:', error));
     </script>
 </body>
 </html>
