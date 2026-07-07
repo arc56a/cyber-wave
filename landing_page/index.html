@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Cyber Wave | تجربة مستقبلية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <style>
+        :root {
+            --gold: #FFD700;
+            --dark-bg: #050508;
+        }
+        * {
+            -webkit-tap-highlight-color: transparent;
+        }
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--dark-bg);
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+        /* خلفية الفيديو */
+        .video-bg-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        .video-bg-container video {
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            object-fit: cover;
+        }
+        .video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(5, 5, 8, 0.7), rgba(5, 5, 8, 0.9));
+        }
+        .gold-gradient-text {
+            background: linear-gradient(135deg, #FFF5B8 0%, #FFD700 50%, #B8860B 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+        .metallic-text {
+            background: linear-gradient(180deg, #FFFFFF 0%, #B0B0B0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        /* خلفية مخصصة للجوال */
+        .mobile-bg {
+            background: radial-gradient(circle at top right, rgba(255, 215, 0, 0.1), transparent),
+                        radial-gradient(circle at bottom left, rgba(30, 30, 60, 0.3), transparent);
+        }
+        /* جعل الحاوية ضيقة وممركزة للجوال */
+        .mobile-container {
+            max-width: 450px;
+            margin: 0 auto;
+            position: relative;
+            min-height: 100vh;
+        }
+        .phone-mockup-wrapper {
+            position: relative;
+            width: 100%;
+            padding-top: 10px;
+            display: flex;
+            justify-content: center;
+        }
+        .phone-mockup {
+            width: 90%;
+            aspect-ratio: 9/19;
+            background: #000;
+            border: 8px solid #1a1a2e;
+            border-radius: 40px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8), 0 0 20px rgba(255,215,0,0.1);
+            overflow: hidden;
+            position: relative;
+        }
+        .btn-download {
+            background: linear-gradient(135deg, #FFD700 0%, #B8860B 100%);
+            color: black;
+            font-weight: 900;
+            border-radius: 20px;
+            padding: 18px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
+            width: 100%;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+        .btn-download:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(255, 215, 0, 0.4);
+        }
+        .btn-ios {
+            background: rgba(255, 255, 255, 0.03);
+            color: rgba(255, 255, 255, 0.2);
+            font-weight: 700;
+            border-radius: 20px;
+            padding: 18px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            width: 100%;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            cursor: not-allowed;
+            position: relative;
+            filter: grayscale(1);
+        }
+        .coming-soon-text {
+            font-size: 9px;
+            background: rgba(255, 215, 0, 0.1);
+            color: var(--gold);
+            padding: 2px 10px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            margin-right: auto;
+        }
+        .feature-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 215, 0, 0.1);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 12px;
+        }
+        .swiper-pagination-bullet {
+            background: var(--gold) !important;
+        }
+        /* تصميم واجهات التطبيق الداخلية داخل الهاتف */
+        .app-screen {
+            width: 100%;
+            height: 100%;
+            background: #080812;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+            text-align: right;
+        }
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .bento-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 215, 0, 0.1);
+            border-radius: 15px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .bento-item-large {
+            grid-column: span 2;
+            height: 120px;
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), transparent);
+        }
+        .app-status-bar {
+            height: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 8px;
+            color: rgba(255, 255, 255, 0.4);
+            margin-bottom: 15px;
+        }
+        .nav-dots {
+            display: flex;
+            gap: 4px;
+        }
+        .nav-dot {
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: rgba(255, 215, 0, 0.3);
+        }
+        .app-player-disk {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: conic-gradient(from 0deg, #111, #333, #111);
+            margin: 30px auto;
+            position: relative;
+            border: 5px solid #1a1a2e;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+            animation: rotate-cw 10s linear infinite;
+        }
+        .app-player-disk::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40px;
+            height: 40px;
+            background: #080812;
+            border-radius: 50%;
+            border: 2px solid var(--gold);
+        }
+        .app-tab-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        /* تأثير الدوائر الدوارة حول الشعار */
+        .logo-wrapper {
+            position: relative;
+            padding: 4px;
+        }
+        .rotating-ring {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 2px solid transparent;
+        }
+        .ring-1 {
+            border-top-color: var(--gold);
+            border-right-color: var(--gold);
+            animation: rotate-cw 2s linear infinite;
+        }
+        .ring-2 {
+            border-bottom-color: #ffffff;
+            border-left-color: #ffffff;
+            animation: rotate-ccw 3s linear infinite;
+            opacity: 0.5;
+        }
+        @keyframes rotate-cw {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        @keyframes rotate-ccw {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(-360deg); }
+        }
+    </style>
+</head>
+<body class="relative">
+
+    <!-- Video Background -->
+    <div class="video-bg-container">
+        <video id="bgVideo" autoplay muted loop playsinline poster="media/1.jpg">
+            <source src="media/webbckved.mp4" type="video/mp4">
+        </video>
+        <div class="video-overlay"></div>
+    </div>
+
+    <div class="mobile-container flex flex-col px-6">
+
+        <!-- Header -->
+        <header class="py-10 flex items-center gap-6">
+            <div class="logo-wrapper">
+                <!-- الروابط الدوارة -->
+                <div class="rotating-ring ring-1"></div>
+                <div class="rotating-ring ring-2"></div>
+                <!-- الشعار الأساسي -->
+                <div class="w-16 h-16 rounded-full overflow-hidden border border-white/10 shadow-[0_0_25px_rgba(255,255,255,0.15)] bg-black/60 flex items-center justify-center relative z-10">
+                    <img src="media/iconweb.png" alt="Cyber Wave Icon" class="w-full h-full object-contain scale-125">
+                </div>
+            </div>
+            <h1 class="text-3xl font-black metallic-text">Cyber Wave</h1>
+
+            <!-- زر كتم الصوت -->
+            <button id="muteBtn" class="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white backdrop-blur-md mr-auto active:scale-90 transition-all">
+                <svg id="unmuteIcon" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path>
+                </svg>
+                <svg id="muteIcon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15zM17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2"></path>
+                </svg>
+            </button>
+        </header>
+
+        <!-- Main Content -->
+        <main class="flex-grow flex flex-col items-center">
+
+            <!-- App Info & Description -->
+            <div class="w-full text-right mt-4 mb-10">
+
+                <div class="grid grid-cols-2 gap-3 mb-8">
+                    <div class="bg-white/5 border border-white/10 rounded-2xl p-4 shadow-inner">
+                        <span class="text-gray-500 text-[10px] block mb-1 uppercase tracking-widest">الإصدار</span>
+                        <span class="text-gold font-black text-lg">V 1.0.0</span>
+                    </div>
+                    <div class="bg-white/5 border border-white/10 rounded-2xl p-4 shadow-inner">
+                        <span class="text-gray-500 text-[10px] block mb-1 uppercase tracking-widest">سنة الإنتاج</span>
+                        <span class="text-gold font-black text-lg">2026</span>
+                    </div>
+                    <div class="bg-white/5 border border-white/10 rounded-2xl p-4 col-span-2 shadow-inner flex justify-between items-center">
+                        <div>
+                            <span class="text-gray-500 text-[10px] block mb-1 uppercase tracking-widest">آخر تحديث</span>
+                            <span class="text-gold font-black text-lg">7 يوليو 2026</span>
+                        </div>
+                        <div class="w-10 h-10 bg-gold/10 rounded-full flex items-center justify-center border border-gold/20">
+                            <svg class="w-5 h-5 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-gradient-to-br from-white/10 to-transparent border border-white/10 rounded-[30px] p-6 mb-10 shadow-2xl backdrop-blur-sm">
+                    <h3 class="text-gold font-black mb-4 flex items-center gap-2">
+                        <span class="w-2 h-2 bg-gold rounded-full animate-pulse"></span>
+                        وصف التطبيق
+                    </h3>
+                    <p class="text-gray-300 text-sm leading-loose font-medium">
+                        تطبيق <span class="text-white font-bold">Cyber Wave</span> هو بوابتك لتجربة موسيقية وصوتية من المستقبل. يجمع التطبيق بين مشغل موسيقى فائق الجودة بتصميم Cyberpunk فاخر، وبين راديو القرآن الكريم الذي يضم تلاوات عطرة لأشهر القراء. بالإضافة إلى ذلك، يوفر التطبيق أقساماً متكاملة للبودكاست وأحدث الأخبار، مع واجهة مستخدم تعتمد نظام الـ Bento الذكي لضمان أسرع وصول لمحتواك المفضل بلمسة واحدة.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Download Section -->
+            <div class="w-full flex flex-col items-center gap-4 mb-16">
+                <div class="w-24 h-24 rounded-3xl overflow-hidden shadow-[0_20px_40px_rgba(0,0,0,0.5)] border border-white/10 p-1 bg-black/50 mb-4">
+                    <img src="media/iconweb.png" alt="App Icon" class="w-full h-full object-contain">
+                </div>
+
+                <!-- Android Button -->
+                <a href="ضع_رابط_تحميل_الأندرويد_هنا" class="btn-download text-lg active:scale-95">
+                    <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M17.5 12c.83 0 1.5-.67 1.5-1.5S18.33 9 17.5 9 16 9.67 16 10.5s.67 1.5 1.5 1.5zm-11 0c.83 0 1.5-.67 1.5-1.5S7.33 9 6.5 9 5 9.67 5 10.5s.67 1.5 1.5 1.5zm11.23-4.22l1.64-2.83a.502.502 0 00-.18-.69.502.502 0 00-.69.18l-1.66 2.87c-1.37-.59-2.89-.91-4.49-.91-1.6 0-3.12.32-4.49.91L5.85 4.44a.502.502 0 00-.69-.18.502.502 0 00-.18.69l1.64 2.83C4.09 9.38 2.37 12 2.11 15h19.78c-.26-3-1.98-5.62-4.51-7.22z"></path>
+                    </svg>
+                    تحميل للأندرويد (APK)
+                </a>
+
+                <!-- iPhone Button (Soon) -->
+                <!-- هنا تضع رابط تحميل الآيفون مستقبلاً وتغير div إلى a -->
+                <!-- (احذف هذا السطر وضع الرابط هنا عند توفره) -->
+                <div class="btn-ios text-lg">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M18.71,19.5C17.88,20.74 17,21.95 15.66,21.97C14.32,22 13.89,21.18 12.37,21.18C10.84,21.18 10.37,21.95 9.1,22C7.79,22.05 6.8,20.68 5.96,19.47C4.25,17 2.94,12.45 4.7,9.39C5.57,7.87 7.13,6.91 8.82,6.88C10.1,6.86 11.32,7.75 12.11,7.75C12.89,7.75 14.37,6.68 15.92,6.84C16.57,6.87 18.39,7.1 19.56,8.82C19.47,8.88 17.39,10.1 17.41,12.63C17.44,15.65 20.06,16.66 20.09,16.67C20.06,16.74 19.67,18.11 18.71,19.5M13,3.5C13.73,2.67 14.94,2.04 15.94,2C16.07,3.17 15.6,4.35 14.9,5.19C14.21,6.04 13.07,6.7 11.95,6.61C11.8,5.46 12.36,4.26 13,3.5Z"></path>
+                    </svg>
+                    نسخة الـ iOS
+                    <span class="coming-soon-text">قريباً</span>
+                </div>
+            </div>
+
+            <!-- Phone Mockup (Showcase) -->
+            <div class="w-full text-center mb-6">
+                <h3 class="text-gold font-black flex items-center justify-center gap-3">
+                    <span class="w-2 h-2 bg-gold rounded-full animate-pulse"></span>
+                    تجربة حية للتطبيق
+                </h3>
+            </div>
+            <div class="phone-mockup-wrapper mb-12">
+                <div class="phone-mockup">
+                    <div class="swiper mySwiper h-full">
+                        <div class="swiper-wrapper">
+
+                            <!-- Slide 1 -->
+                            <div class="swiper-slide">
+                                <img src="media/1.jpg" alt="Screen 1" class="w-full h-full object-cover">
+                            </div>
+
+                            <!-- Slide 2 -->
+                            <div class="swiper-slide">
+                                <img src="media/2.jpg" alt="Screen 2" class="w-full h-full object-cover">
+                            </div>
+
+                            <!-- Slide 3 -->
+                            <div class="swiper-slide">
+                                <img src="media/3.jpg" alt="Screen 3" class="w-full h-full object-cover">
+                            </div>
+
+                            <!-- Slide 4 -->
+                            <div class="swiper-slide">
+                                <img src="media/4.jpg" alt="Screen 4" class="w-full h-full object-cover">
+                            </div>
+
+                            <!-- Slide 5 -->
+                            <div class="swiper-slide">
+                                <img src="media/5.jpg" alt="Screen 5" class="w-full h-full object-cover">
+                            </div>
+
+                            <!-- Video Slide -->
+                            <div class="swiper-slide relative">
+                                <video autoplay muted loop playsinline class="absolute inset-0 w-full h-full object-cover opacity-60">
+                                    <source src="media/webbckved.mp4" type="video/mp4">
+                                </video>
+                                <div class="absolute inset-0 flex flex-col items-center justify-center p-4">
+                                    <div class="w-12 h-12 border-2 border-gold rounded-full animate-ping mb-2"></div>
+                                    <span class="text-gold text-[10px] font-bold tracking-widest uppercase">Live View</span>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="swiper-pagination"></div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+
+        <!-- Footer -->
+        <footer class="py-10 text-center border-t border-white/5">
+            <p class="text-[10px] text-gray-600 tracking-widest uppercase">Cyber Wave &copy; 2026</p>
+        </footer>
+
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script>
+        var swiper = new Swiper(".mySwiper", {
+            grabCursor: true,
+            pagination: { el: ".swiper-pagination", clickable: true },
+            autoplay: { delay: 4000, disableOnInteraction: false },
+            loop: true,
+            effect: "fade",
+            fadeEffect: { crossFade: true }
+        });
+
+        // منطق كتم وتشغيل الصوت
+        const video = document.getElementById('bgVideo');
+        const muteBtn = document.getElementById('muteBtn');
+        const muteIcon = document.getElementById('muteIcon');
+        const unmuteIcon = document.getElementById('unmuteIcon');
+
+        muteBtn.addEventListener('click', function() {
+            if (video.muted) {
+                video.muted = false;
+                muteIcon.classList.add('hidden');
+                unmuteIcon.classList.remove('hidden');
+            } else {
+                video.muted = true;
+                muteIcon.classList.remove('hidden');
+                unmuteIcon.classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
