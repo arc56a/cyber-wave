@@ -1,6 +1,6 @@
 {
-  "version": "1.1.0",
+  "version": "1.0.0",
   "build_number": 1,
   "download_url": "https://arc56a.github.io/cyber-wave/",
-  "release_notes": "نسخة أولية مستقرة من تطبيق Cyber Wave مع واجهة مستخدم محسنة."
+  "release_notes": "(هنا تضع النص الذي يظهر للمستخدم في نافذة التحديث - مثال: تم إضافة ميزات جديدة وتحسين الأداء)"
 }
